@@ -16,7 +16,7 @@ tags: ["R Markdown", "plot", "regression"]
 <p>If you simply look at the mean, you’ll see that 15.54 birdies per tournament is “average” for a pro golfer who plays all 4 rounds, at least in this dataset. However, knowing that the number of birdies is heavily affected by outliers, with many golfers, even pros, having a lot of variance in their play, let’s use a bootsrapped median to get a better idea.</p>
 <pre><code>## boot_Median
 ##  15  16 
-## 384 616</code></pre>
+## 380 620</code></pre>
 <pre><code>##  2.5% 97.5% 
 ##    15    16</code></pre>
 <p>As we can see from this output, the most likely median for the number of birdies gotten by a golfer in a tournament is 16. With a 95% confidence interval defining 15 and 16 birdies as upper and lower bounds, we can conclude that the “average” pro golfer in this set would likely get 15-16 birdies per tournament, or 3-4 birdies per day. A lot more than I would ever get!</p>
