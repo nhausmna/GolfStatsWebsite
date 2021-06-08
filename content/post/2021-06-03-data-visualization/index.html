@@ -1,0 +1,132 @@
+---
+title: "Introducing the Dataset"
+author: "Nick Hausman"
+date: 2021-06-03T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="the-golfstats-data-set" class="section level1">
+<h1>The GOLFstats data set</h1>
+<p>The GOLFstats data set is a set of professional golf data collected by GOLFstats. This is their sample data, because they charge very high fees to access recent data, which I cannot afford as a student. In this dataset, information about a specific golf tournaments and player stats are presented.</p>
+<pre><code>##       tid              tyear         tname              ttour          
+##  Min.   :  12015   Min.   :2015   Length:2111        Length:2111       
+##  1st Qu.:  52015   1st Qu.:2015   Class :character   Class :character  
+##  Median :2062015   Median :2015   Mode  :character   Mode  :character  
+##  Mean   :1350286   Mean   :2015                                        
+##  3rd Qu.:2102015   3rd Qu.:2015                                        
+##  Max.   :3752015   Max.   :2015                                        
+##                                                                        
+##     tdate             tcourse             tcity              tstate         
+##  Length:2111        Length:2111        Length:2111        Length:2111       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##     tyards               tpar            par            place       
+##  Length:2111        Min.   :70.00   Min.   :70.00   Min.   :  1.00  
+##  Class :character   1st Qu.:71.00   1st Qu.:71.00   1st Qu.: 32.00  
+##  Mode  :character   Median :72.00   Median :72.00   Median : 75.00  
+##                     Mean   :71.69   Mean   :71.69   Mean   : 67.03  
+##                     3rd Qu.:72.00   3rd Qu.:72.00   3rd Qu.:100.00  
+##                     Max.   :73.00   Max.   :73.00   Max.   :102.00  
+##                                                                     
+##      tie                name               score           first      
+##  Length:2111        Length:2111        Min.   :  0.0   Min.   : 0.00  
+##  Class :character   Class :character   1st Qu.:148.0   1st Qu.:69.00  
+##  Mode  :character   Mode  :character   Median :224.0   Median :71.00  
+##                                        Mean   :218.6   Mean   :71.29  
+##                                        3rd Qu.:281.0   3rd Qu.:73.00  
+##                                        Max.   :302.0   Max.   :89.00  
+##                                                                       
+##      second          third           fourth          fifth       money        
+##  Min.   : 0.00   Min.   : 0.00   Min.   : 0.00   Min.   :0   Min.   :      0  
+##  1st Qu.:69.00   1st Qu.: 0.00   1st Qu.: 0.00   1st Qu.:0   1st Qu.:      0  
+##  Median :71.00   Median :67.00   Median : 0.00   Median :0   Median :  10864  
+##  Mean   :70.76   Mean   :41.32   Mean   :35.27   Mean   :0   Mean   :  35997  
+##  3rd Qu.:74.00   3rd Qu.:71.00   3rd Qu.:71.00   3rd Qu.:0   3rd Qu.:  26533  
+##  Max.   :88.00   Max.   :82.00   Max.   :83.00   Max.   :0   Max.   :1224000  
+##                                                              NA&#39;s   :433      
+##        fh           rank_fh         distance        rank_dis    
+##  Min.   : 0.00   Min.   :  0.0   Min.   :  0.0   Min.   :  0.0  
+##  1st Qu.:15.00   1st Qu.:  0.0   1st Qu.:273.0   1st Qu.:  0.0  
+##  Median :25.00   Median : 28.0   Median :285.3   Median : 30.0  
+##  Mean   :23.22   Mean   :233.2   Mean   :250.3   Mean   :233.8  
+##  3rd Qu.:33.00   3rd Qu.: 67.0   3rd Qu.:294.8   3rd Qu.: 67.0  
+##  Max.   :53.00   Max.   :999.0   Max.   :330.5   Max.   :999.0  
+##                                                                 
+##       gir           rank_gir         putts          putts_per    
+##  Min.   : 0.00   Min.   :  0.0   Min.   :  0.00   Min.   : 0.00  
+##  1st Qu.:21.00   1st Qu.:  0.0   1st Qu.: 60.00   1st Qu.:27.50  
+##  Median :37.00   Median : 28.0   Median : 90.00   Median :29.00  
+##  Mean   :33.89   Mean   :233.1   Mean   : 82.69   Mean   :26.23  
+##  3rd Qu.:50.00   3rd Qu.: 67.0   3rd Qu.:115.00   3rd Qu.:30.25  
+##  Max.   :67.00   Max.   :999.0   Max.   :137.00   Max.   :62.00  
+##                                                                  
+##    rank_putts        par_3s            par_4s           par_5s       
+##  Min.   :  0.0   Min.   :-7.0000   Min.   :-16.00   Min.   :-16.000  
+##  1st Qu.:  0.0   1st Qu.:-1.0000   1st Qu.: -1.00   1st Qu.: -6.000  
+##  Median : 28.0   Median : 0.0000   Median :  1.00   Median : -3.000  
+##  Mean   :233.3   Mean   : 0.3979   Mean   :  1.73   Mean   : -3.583  
+##  3rd Qu.: 67.0   3rd Qu.: 2.0000   3rd Qu.:  5.00   3rd Qu.: -1.000  
+##  Max.   :999.0   Max.   :10.0000   Max.   : 20.00   Max.   :  6.000  
+##                                                                      
+##      eagles          birdies           pars           bogeys      
+##  Min.   :0.0000   Min.   : 0.00   Min.   : 0.00   Min.   : 0.000  
+##  1st Qu.:0.0000   1st Qu.: 5.00   1st Qu.:22.00   1st Qu.: 5.000  
+##  Median :0.0000   Median :11.00   Median :36.00   Median : 7.000  
+##  Mean   :0.2572   Mean   :10.33   Mean   :32.07   Mean   : 7.414  
+##  3rd Qu.:0.0000   3rd Qu.:16.00   3rd Qu.:45.00   3rd Qu.:10.000  
+##  Max.   :4.0000   Max.   :29.00   Max.   :61.00   Max.   :22.000  
+##                                                                   
+##     doubles           others   first_place      second_place   
+##  Min.   :0.0000   Min.   :0   Min.   :  0.00   Min.   :  0.00  
+##  1st Qu.:0.0000   1st Qu.:0   1st Qu.: 29.00   1st Qu.: 29.00  
+##  Median :1.0000   Median :0   Median : 64.00   Median : 64.00  
+##  Mean   :0.9157   Mean   :0   Mean   : 68.29   Mean   : 69.02  
+##  3rd Qu.:1.0000   3rd Qu.:0   3rd Qu.:103.00   3rd Qu.:104.00  
+##  Max.   :7.0000   Max.   :0   Max.   :210.00   Max.   :206.00  
+##                                                                
+##   third_place      fourth_place  
+##  Min.   :  0.00   Min.   : 0.00  
+##  1st Qu.:  0.00   1st Qu.: 0.00  
+##  Median :  9.00   Median : 0.00  
+##  Mean   : 25.95   Mean   :16.89  
+##  3rd Qu.: 45.00   3rd Qu.:32.00  
+##  Max.   :156.00   Max.   :78.00  
+## </code></pre>
+</div>
+<div id="why-i-chose-this-data" class="section level1">
+<h1>Why I Chose This Data</h1>
+<p>As someone who grew up being addicted to golf, I had a history of being interested in both playing and watching the sport. With it being the spring quarter, and the weather in SLO being so perfect all the time, I have been regretting my decision to stop playing during high school. I found golf very frustrating, and never played it “for fun”. Soon, I hope to change this, and reignite my interest. What sparked this idea, though? Well just a few weeks ago, I saw one of my favorite all time players, Phil Mickelson, win the PGA Championship at 50 years old, the oldest age for a player to win a PGA Major. It reminded me of how much I looked up to Phil and other players as a kid, and I thought what better way to reintroduce golf into my life then analyze it! Speaking of Phil, let’s see if he appears in the Dataset:</p>
+<pre><code>##     tid tyear                         tname ttour     tdate
+## 1 22015  2015              Humana Challenge   PGA 1/25/2015
+## 2 32015  2015 Waste Management Phoenix Open   PGA  2/1/2015
+## 3 52015  2015        Farmers Insurance Open   PGA  2/8/2015
+##                tcourse      tcity tstate tyards tpar par place tie
+## 1      PGA West/Palmer  La Quinta    Ca.   6950   72  72    24 YES
+## 2    TPC of Scottsdale Scottsdale  Ariz.  7,266   71  71   100 CUT
+## 3 Torrey Pines (South)  San Diego    Ca.  7,628   72  72   100 CUT
+##             name score first second third fourth fifth money fh rank_fh
+## 1 Phil Mickelson   273    71     66    68     68     0 46170 38      19
+## 2 Phil Mickelson   145    69     76     0      0     0    NA 18     999
+## 3 Phil Mickelson   146    74     72     0      0     0    NA 16     999
+##   distance rank_dis gir rank_gir putts putts_per rank_putts par_3s par_4s
+## 1    305.9        6  54       12   113     28.25         54      1     -5
+## 2    284.5      999  20      999    58     29.00        999      1      0
+## 3    299.0      999  26      999    64     32.00        999      0      2
+##   par_5s eagles birdies pars bogeys doubles others first_place second_place
+## 1    -11      0      26   35     11       0      0          89           36
+## 2      2      0       6   22      7       1      0          29           94
+## 3      0      0       5   24      7       0      0         112          108
+##   third_place fourth_place
+## 1          34           24
+## 2           0            0
+## 3           0            0</code></pre>
+<p>Sweet! My Analysis of this data will occur on other pages, so please navigate to those to check it out.</p>
+</div>

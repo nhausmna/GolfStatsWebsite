@@ -1,0 +1,3 @@
+"0","birdies_eagles <- golf %>%"
+"0","  lm(eagles ~ birdies, data = .)"
+"0","plot(eagles ~ birdies, data = golf)"

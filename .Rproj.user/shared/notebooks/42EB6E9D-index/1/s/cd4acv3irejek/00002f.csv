@@ -1,0 +1,6 @@
+"0","chart_data <- get_nameProperties(names)"
+"0","ggplot(data=chart_data, aes(x=Characteristic, y=Proportion, fill=Characteristic)) +"
+"0","  geom_bar(stat=""identity"") + "
+"0","  theme(legend.position = ""none"")+ "
+"0","  geom_text(aes(y = Proportion + 0.003, label = Counts, "
+"0","                x = Characteristic))"

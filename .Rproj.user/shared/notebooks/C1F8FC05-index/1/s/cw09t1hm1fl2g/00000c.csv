@@ -1,0 +1,4 @@
+"0","boots <- data.frame(Birdies = modified_birdies) %>%"
+"0","  modelr::bootstrap(1000)"
+"0","boot_Median <- map_dbl(boots$strap, ~median(data.frame(.x)$Birdies))"
+"0","interval <- boot_Median %>% quantile(c(0.025, 0.975))"

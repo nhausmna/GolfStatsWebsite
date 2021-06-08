@@ -1,0 +1,5 @@
+"0","knitr::opts_chunk$set(collapse = TRUE, echo = FALSE)"
+"0","library(tidyverse)"
+"0","library(infer)"
+"0","library(tidyr)"
+"0","library(modelr)"

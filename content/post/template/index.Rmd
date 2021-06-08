@@ -1,0 +1,75 @@
+---
+title: "Analyzing the Data"
+author: "Nick Hausman"
+date: 2021-06-06T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, echo = FALSE)
+library(tidyverse)
+library(infer)
+library(tidyr)
+library(modelr)
+```
+```{r cars}
+golf <- read.csv("golfstats_dataexport_sample.csv")
+```
+
+# Birdies
+
+Golfers often make birdies look simple. Using only 3 strokes to make a ball into a hole on a 400 yard par 4 is nothing easy, and I have realized this through my own play, only getting a few birdies my entire life. An interesting question for me then is: How many birdies does the average pro golfer get in a tournament? For this, I'll only look at golfers who played all four rounds.
+
+```{r}
+modified_birdies <- golf %>%
+  filter(fourth > 0) %>%
+  pull(birdies)
+mean(modified_birdies)
+```
+
+If you simply look at the mean, you'll see that 15.54 birdies per tournament is "average" for a pro golfer who plays all 4 rounds, at least in this dataset. However, knowing that the number of birdies is heavily affected by outliers, with many golfers, even pros, having a lot of variance in their play, let's use a bootsrapped median to get a better idea.
+
+```{r}
+boots <- data.frame(Birdies = modified_birdies) %>%
+  modelr::bootstrap(1000)
+boot_Median <- map_dbl(boots$strap, ~median(data.frame(.x)$Birdies))
+interval <- boot_Median %>% quantile(c(0.025, 0.975))
+```
+
+```{r}
+table(boot_Median)
+```
+
+```{r}
+interval
+```
+
+As we can see from this output, the most likely median for the number of birdies gotten by a golfer in a tournament is 16. With a 95% confidence interval defining 15 and 16 birdies as upper and lower bounds, we can conclude that the "average" pro golfer in this set would likely get 15-16 birdies per tournament, or 3-4 birdies per day. A lot more than I would ever get!
+
+# Birdies affecting Eagles
+
+Another question I would often have about pro golf is whether momentum affects golfers heavily. One interesting way to investigate this is analyzing whether the number of birdies a golfer gets affects how many eagles they get. If a golfer gets many birdies, one may expect them to use this momentum to get even more eagles.
+
+```{r}
+birdies_eagles <- golf %>%
+  lm(eagles ~ birdies, data = .)
+plot(eagles ~ birdies, data = golf)
+abline(birdies_eagles)
+```
+
+While the linear model appears to have some postive correlation, the data in this graph makes it obvious that a trendline can't give us any meaningful conclusions, due to how randomly scattered datapoints are. A chi-squared test will likely give a more definitive observation.
+
+```{r}
+golf %>%
+  mutate(
+    eagles = factor(eagles),
+    birdies = factor(birdies)
+  ) %>%
+  chisq_test(
+    response = eagles,
+    explanatory = birdies
+  )
+```
+
+From this output, given that our p value is < 0.05, we can reject the null hypothesis. In this situation our null hypothesis is: The number of eagles gotten by a golfer in a tournament is not affected by the number of birdies. Accepting our alternative hypothesis, we can conclude thwt there is evidence that suggests the number of eagles in a tournament is affected by the number of birdies in that tournament. I guess momentum does have some effect! However, we must remember that momentum is not all that affects golfers. Course difficulty was more likely a bigger factor here.

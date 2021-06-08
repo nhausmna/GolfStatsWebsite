@@ -1,0 +1,32 @@
+---
+title: "Introducing the Dataset"
+author: "Nick Hausman"
+date: 2021-06-03T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, echo = FALSE)
+library(tidyverse)
+```
+
+# The GOLFstats data set
+
+The GOLFstats data set is a set of professional golf data collected by GOLFstats. This is their sample data, because they charge very high fees to access recent data, which I cannot afford as a student. In this dataset, information about a specific golf tournaments and player stats are presented.
+
+```{r cars}
+golf <- read.csv("golfstats_dataexport_sample.csv")
+summary(golf)
+```
+
+# Why I Chose This Data
+
+As someone who grew up being addicted to golf, I had a history of being interested in both playing and watching the sport. With it being the spring quarter, and the weather in SLO being so perfect all the time, I have been regretting my decision to stop playing during high school. I found golf very frustrating, and never played it "for fun". Soon, I hope to change this, and reignite my interest. What sparked this idea, though? Well just a few weeks ago, I saw one of my favorite all time players, Phil Mickelson, win the PGA Championship at 50 years old, the oldest age for a player to win a PGA Major. It reminded me of how much I looked up to Phil and other players as a kid, and I thought what better way to reintroduce golf into my life then analyze it! Speaking of Phil, let's see if he appears in the Dataset:
+
+```{r}
+golf %>%
+  filter(name == "Phil Mickelson")
+```
+
+Sweet! My Analysis of this data will occur on other pages, so please navigate to those to check it out.

@@ -1,0 +1,8 @@
+"0","modified_birdies <- golf %>%"
+"0","  filter(fourth > 0) %>%"
+"0","  pull(birdies)"
+"0","mean(modified_birdies)"
+"1","[1]"
+"1"," 15.54163"
+"1","
+"

@@ -1,0 +1,39 @@
+---
+title: "Visualizing the Data"
+author: "Nick Hausman"
+date: 2021-06-04T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="observing-average-score-in-each-location" class="section level1">
+<h1>Observing Average score in each location</h1>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>From this graphic, the scores appear to be very similar. From each score, I’ll subtract the minimum to get a better view on the differences.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Interestingly, it appears that the difference in average scores peaks at about 7 between Humana and the Sony Open. As someone who watched professional golf a lot, it always seemed to me as though different courses make a major difference. Often the leaderboards would vary by ~10 strokes, and this visualization seems to deny that personal observation.</p>
+</div>
+<div id="score-progression" class="section level1">
+<h1>Score Progression</h1>
+<p>Another interesting idea to take a look at is how players’ scores change between rounds. I have somewhat expected that players get more used to courses as they play, so I would suspect average scores to go down.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Suprisingly, golfers get worse as the tournaments go on! I suspect it may have to do with sleep, soreness, and other factors that affect athletes.</p>
+</div>
+<div id="money" class="section level1">
+<h1>Money</h1>
+<p>As a golf watcher, I’ve also often wondered how much the “average” pro golfer will make. To investigate, I think a violin plot can visualize the distributions of prixe money at each tournament.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>From this output, it seems as though most tournaments net 10-30k for most professional golfers. With sponsorships and whatnot to go along with it, this is not a bad deal.</p>
+</div>
+<div id="names" class="section level1">
+<h1>Names</h1>
+<p>With a lot of golfers coming from many different places around the world, I would often notice golfers with quite interesting names. Using regex, we can investigate how many players have unique (not common) names.</p>
+<p>For this to be visualized, I decided to find whether a given name could be characterized as any (or multiple) of the following:
+A name with alliteration, a name with any non letter character, a name with more than just the individual first and last names (more than two words in the same), or a name with any word in the name longer than 10 letters</p>
+<p>While these properties don’t necessarily define what’s abnormal, these characteristics don’t appear super often either, and may be interesting in how they appear in golfers.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>While this data isn’t the most useful, it allows us to observe some interesting characteristics about the golfers’ names! Most of them do not have any characteristics, as made obvious by the proportions. However, there are still some as we can see from the counts of each labeled above the bars.</p>
+</div>

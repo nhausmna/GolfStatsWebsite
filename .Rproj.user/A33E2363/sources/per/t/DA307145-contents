@@ -1,0 +1,125 @@
+---
+title: "Visualizing the Data"
+author: "Nick Hausman"
+date: 2021-06-04T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, echo = FALSE)
+library(tidyverse)
+```
+
+# Observing Average score in each location
+
+```{r}
+golf <- read.csv("golfstats_dataexport_sample.csv")
+scores <- golf %>%
+  filter(fourth > 0) %>%
+  group_by(tname) %>%
+  summarize(mean(score))
+ggplot(data=scores, aes(x=tname, y=`mean(score)`, fill=tname)) +
+  geom_bar(stat="identity")+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+From this graphic, the scores appear to be very similar. From each score, I'll subtract the minimum to get a better view on the differences.
+
+```{r}
+golf <- read.csv("golfstats_dataexport_sample.csv")
+scores <- golf %>%
+  filter(fourth > 0) %>%
+  group_by(tname) %>%
+  summarize(mean(score) - min(score))
+ggplot(data=scores, aes(x=tname, y=`mean(score) - min(score)`, fill=tname)) +
+  geom_bar(stat="identity")+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+Interestingly, it appears that the difference in average scores peaks at about 7 between Humana and the Sony Open. As someone who watched professional golf a lot, it always seemed to me as though different courses make a major difference. Often the leaderboards would vary by ~10 strokes, and this visualization seems to deny that personal observation.
+
+# Score Progression
+
+Another interesting idea to take a look at is how players' scores change between rounds. I have somewhat expected that players get more used to courses as they play, so I would suspect average scores to go down.
+
+```{r}
+round_scores <- golf %>%
+  filter(fourth > 0) %>%
+  summarize(mean(first), mean(second), mean(third), mean(fourth))
+round_stdev <- golf %>%
+  filter(fourth > 0) %>%
+  summarize(sd(first), sd(second), sd(third), sd(fourth))
+
+upper <- as.numeric(as.vector(round_scores[1,])) + as.numeric(as.vector(round_stdev[1,]))
+lower <- as.numeric(as.vector(round_scores[1,])) - as.numeric(as.vector(round_stdev[1,]))
+
+
+to_plot = data.frame(Round=c("1st", "2nd", "3rd", "4th"), "Average Score" = as.numeric(as.vector(round_scores[1,])))
+ggplot(data=to_plot, aes(x=Round, y=Average.Score, group=1)) +
+  geom_line()+
+  geom_point()+
+  ylim(69, 72)
+```
+
+Suprisingly, golfers get worse as the tournaments go on! I suspect it may have to do with sleep, soreness, and other factors that affect athletes.
+
+# Money
+
+As a golf watcher, I've also often wondered how much the "average" pro golfer will make. To investigate, I think a violin plot can visualize the distributions of prixe money at each tournament.
+
+```{r}
+not_na_money <- golf %>%
+  drop_na(money) %>%
+  pull(money)
+
+golf_modified_forMoney <- golf %>%
+  drop_na(money) %>%
+  filter(money > quantile(not_na_money, 0.1)) %>%
+  filter(money < quantile(not_na_money, 0.9)) 
+  
+ggplot(golf_modified_forMoney, aes(x=tname, y=money, fill=tname)) + 
+  geom_violin() +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+From this output, it seems as though most tournaments net 10-30k for most professional golfers. With sponsorships and whatnot to go along with it, this is not a bad deal.
+
+# Names
+
+With a lot of golfers coming from many different places around the world, I would often notice golfers with quite interesting names. Using regex, we can investigate how many players have unique (not common) names.
+
+For this to be visualized, I decided to find whether a given name could be characterized as any (or multiple) of the following:
+A name with alliteration, a name with any non letter character, a name with more than just the individual first and last names (more than two words in the same), or a name with any word in the name longer than 10 letters
+
+While these properties don't necessarily define what's abnormal, these characteristics don't appear super often either, and may be interesting in how they appear in golfers.
+
+```{r}
+names <- unique(golf$name)
+get_nameProperties <- function(names){
+  alliteration <- str_detect(names, "^(\\w)\\w*\\s+\\1\\w*$")
+  justletter <- str_detect(names, "^[ A-Za-z]+$")
+  threeWords <- str_detect(names, "\\w+\\s+\\w+\\s+")
+  longWord <- str_detect(names, "\\w{11,}")
+  titles <- c("Has Alliteration", "Not Only Letters", "More than 2 words", "Long Word in Name")
+  counts <- c(sum(alliteration), sum(!justletter), sum(threeWords), sum(longWord))
+  props <- counts / length(alliteration)
+  return(data.frame("Proportion"=props, "Counts"=counts, "Characteristic"=titles))
+}
+```
+```{r}
+chart_data <- get_nameProperties(names)
+ggplot(data=chart_data, aes(x=Characteristic, y=Proportion, fill=Characteristic)) +
+  geom_bar(stat="identity") + 
+  theme(legend.position = "none")+ 
+  geom_text(aes(y = Proportion + 0.003, label = Counts, 
+                x = Characteristic))
+```
+
+While this data isn't the most useful, it allows us to observe some interesting characteristics about the golfers' names! Most of them do not have any characteristics, as made obvious by the proportions. However, there are still some as we can see from the counts of each labeled above the bars.

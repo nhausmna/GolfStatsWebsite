@@ -1,0 +1,36 @@
+---
+title: "Analyzing the Data"
+author: "Nick Hausman"
+date: 2021-06-06T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="birdies" class="section level1">
+<h1>Birdies</h1>
+<p>Golfers often make birdies look simple. Using only 3 strokes to make a ball into a hole on a 400 yard par 4 is nothing easy, and I have realized this through my own play, only getting a few birdies my entire life. An interesting question for me then is: How many birdies does the average pro golfer get in a tournament? For this, I’ll only look at golfers who played all four rounds.</p>
+<pre><code>## [1] 15.54163</code></pre>
+<p>If you simply look at the mean, you’ll see that 15.54 birdies per tournament is “average” for a pro golfer who plays all 4 rounds, at least in this dataset. However, knowing that the number of birdies is heavily affected by outliers, with many golfers, even pros, having a lot of variance in their play, let’s use a bootsrapped median to get a better idea.</p>
+<pre><code>## boot_Median
+##  15  16 
+## 384 616</code></pre>
+<pre><code>##  2.5% 97.5% 
+##    15    16</code></pre>
+<p>As we can see from this output, the most likely median for the number of birdies gotten by a golfer in a tournament is 16. With a 95% confidence interval defining 15 and 16 birdies as upper and lower bounds, we can conclude that the “average” pro golfer in this set would likely get 15-16 birdies per tournament, or 3-4 birdies per day. A lot more than I would ever get!</p>
+</div>
+<div id="birdies-affecting-eagles" class="section level1">
+<h1>Birdies affecting Eagles</h1>
+<p>Another question I would often have about pro golf is whether momentum affects golfers heavily. One interesting way to investigate this is analyzing whether the number of birdies a golfer gets affects how many eagles they get. If a golfer gets many birdies, one may expect them to use this momentum to get even more eagles.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>While the linear model appears to have some postive correlation, the data in this graph makes it obvious that a trendline can’t give us any meaningful conclusions, due to how randomly scattered datapoints are. A chi-squared test will likely give a more definitive observation.</p>
+<pre><code>## Warning in stats::chisq.test(table(x), ...): Chi-squared approximation may be
+## incorrect
+## # A tibble: 1 x 3
+##   statistic chisq_df  p_value
+##       &lt;dbl&gt;    &lt;int&gt;    &lt;dbl&gt;
+## 1      260.      112 8.79e-14</code></pre>
+<p>From this output, given that our p value is &lt; 0.05, we can reject the null hypothesis. In this situation our null hypothesis is: The number of eagles gotten by a golfer in a tournament is not affected by the number of birdies. Accepting our alternative hypothesis, we can conclude thwt there is evidence that suggests the number of eagles in a tournament is affected by the number of birdies in that tournament. I guess momentum does have some effect! However, we must remember that momentum is not all that affects golfers. Course difficulty was more likely a bigger factor here.</p>
+</div>
